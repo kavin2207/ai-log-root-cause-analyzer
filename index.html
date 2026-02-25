@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Log Analyzer</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #38bdf8;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+        }
+
+        button {
+            background: #38bdf8;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🚀 AI Log Analyzer</h1>
+
+<div class="card">
+    <h3>Upload Log File (.log or .txt or .json)</h3>
+    <input type="file" id="fileInput" />
+    <br/>
+    <button onclick="analyzeLog()">Analyze</button>
+</div>
+
+<div class="card">
+    <h3>Analysis Result</h3>
+    <pre id="result">Waiting for analysis...</pre>
+</div>
+
+<script>
+async function analyzeLog() {
+    const fileInput = document.getElementById("fileInput");
+    const resultBox = document.getElementById("result");
+
+    if (!fileInput.files.length) {
+        alert("Please upload a file first.");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const text = await file.text();
+
+    resultBox.textContent = "Analyzing...";
+
+    try {
+        const response = await fetch("/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ logs: text })
+        });
+
+        const data = await response.json();
+
+        resultBox.textContent = JSON.stringify(data, null, 2);
+
+    } catch (error) {
+        resultBox.textContent = "Error: " + error.message;
+    }
+}
+</script>
+
+</body>
+</html>
