@@ -1,222 +1,176 @@
----
-title: Log Analyzer
-emoji: 🏢
-colorFrom: indigo
-colorTo: red
-sdk: docker
-pinned: false
-short_description: AI-powered log root cause analyzer
----
-
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
-
-
 # 🧠 AI Log Root Cause Analyzer
 
-An intelligent log analysis system that uses Large Language Models (LLMs) to automatically detect patterns, anomalies, and probable root causes from application and infrastructure logs.
+An AI-powered log analysis system that uses Large Language Models (LLMs)
+to automatically detect failure patterns, correlate distributed errors,
+and infer probable root causes from application and infrastructure logs.
 
-Built for scalable backend environments where manual log inspection is slow, noisy, and error-prone.
+Designed for scalable backend systems where manual debugging is slow,
+noisy, and cognitively expensive.
 
----
+------------------------------------------------------------------------
 
-## 🚀 Problem Statement
+# 🚀 Problem Statement
 
-Modern distributed systems generate massive volumes of logs across:
+Modern distributed architectures generate high-volume logs from:
 
-- Microservices
-- Containers
-- CI/CD pipelines
-- Kubernetes clusters
-- Telecom/network systems
+-   Microservices
+-   Containers
+-   CI/CD pipelines
+-   Kubernetes clusters
+-   Telecom / networking systems
+-   Cloud infrastructure
 
-Finding the root cause manually is:
-- Time consuming
-- Context heavy
-- Mentally exhausting
-- Error-prone under production pressure
+Root cause identification becomes difficult due to:
 
-This project automates root cause analysis using LLMs combined with structured preprocessing and intelligent prompt engineering.
+-   Log noise
+-   Cascading failures
+-   Symptom vs root cause confusion
+-   Distributed service dependencies
 
----
+This project automates root cause detection using:
 
-## 🏗 System Architecture
+-   Structured preprocessing
+-   Intelligent chunking
+-   Prompt-engineered LLM reasoning
+-   Context-aware analysis
 
-### High-Level Flow
+------------------------------------------------------------------------
 
-Raw Logs → Preprocessing → Chunking → Embedding / Context Filtering → LLM Analysis → Root Cause Output
+# 🏗 System Architecture
 
+Raw Logs → Preprocessing → Token-Aware Chunking → LLM Reasoning Engine →
+Structured Root Cause Output
 
-### Components
+------------------------------------------------------------------------
 
-1. **Log Ingestion Layer**
-   - Accepts log files (.log, .txt, JSON logs)
-   - Handles multi-line stack traces
-   - Supports streaming input (optional extension)
+## Core Components
 
-2. **Preprocessing Engine**
-   - Noise removal (timestamps, redundant metadata)
-   - Deduplication
-   - Error pattern extraction
-   - Log level classification (INFO, WARN, ERROR, FATAL)
+### 1️⃣ Log Ingestion Layer
 
-3. **Chunking Strategy**
-   - Splits logs into token-aware chunks
-   - Maintains semantic grouping (stack traces kept intact)
-   - Prevents LLM token overflow
+-   Accepts `.log`, `.txt`, JSON logs
+-   Preserves stack traces
+-   Handles multi-line exceptions
+-   Supports CLI or API input
 
-4. **LLM Reasoning Engine**
-   - Uses GPT-based LLM
-   - Performs:
-     - Error summarization
-     - Correlation detection
-     - Probable root cause inference
-     - Fix recommendation generation
+### 2️⃣ Preprocessing Engine
 
-5. **Output Generator**
-   - Root cause summary
-   - Confidence score (optional)
-   - Suggested remediation steps
-   - Impacted services (if identifiable)
+-   Timestamp removal (optional)
+-   Noise filtering
+-   Deduplication
+-   Log level classification
+-   Error extraction via regex
+-   Stack trace grouping
 
----
+### 3️⃣ Chunking Strategy
 
-## 🤖 LLM Model Used
+-   Token-aware segmentation
+-   Maintains semantic grouping
+-   Prevents LLM context overflow
+-   Chronological ordering preserved
 
-### Default Model
+### 4️⃣ LLM Reasoning Engine
 
-- GPT-4 / GPT-4o (via OpenAI API)
+Default Model: - GPT-4 / GPT-4o via OpenAI API
 
-### Why GPT-4?
+Capabilities: - Identify earliest failure signal - Detect cascading
+impact - Differentiate symptom vs root cause - Provide fix
+recommendations - Summarize log context
 
-- Strong reasoning capability
-- Handles noisy unstructured logs well
-- Good at correlating distributed errors
-- Maintains context across large inputs
+### 5️⃣ Output Generator
 
-### Prompt Engineering Strategy
+Structured response includes: - Root Cause - Supporting Evidence -
+Contributing Factors - Suggested Fix - Prevention Strategy - Confidence
+Score
 
-The model is instructed to:
+------------------------------------------------------------------------
 
-- Ignore non-error noise
-- Identify first failure point
-- Detect cascading failures
-- Distinguish between symptom and root cause
-- Suggest actionable debugging steps
+# 📦 Tech Stack
 
-Example reasoning style:
+-   Python 3.10+
+-   OpenAI API
+-   FastAPI
+-   Regex parsing
+-   tiktoken (token counting)
+-   Docker
 
-1) Identify earliest ERROR.
-2) Check dependent service failures.
-3) Detect timeout or configuration issue.
-4) Trace backward from symptom.
+------------------------------------------------------------------------
 
-
----
-
-## 🧠 How It Works (Detailed)
-
-### Step 1: Log Normalization
-
-- Remove timestamps if irrelevant
-- Collapse repetitive log lines
-- Extract structured fields if possible
-
-### Step 2: Error Signal Extraction
-
-Regex patterns detect:
-
-- Exceptions
-- Stack traces
-- Timeouts
-- Connection failures
-- Memory issues
-- Null pointer exceptions
-- DNS resolution failures
-
-### Step 3: Context Window Optimization
-
-Logs are:
-- Token-counted
-- Chunked intelligently
-- Ordered chronologically
-
-Avoids:
-- Token overflow
-- Context fragmentation
-
-### Step 4: LLM Analysis
-
-The system sends structured prompt:
-
-- System Prompt: Defines reasoning strategy
-- User Prompt: Includes filtered log chunks
-
-LLM returns:
-- Root cause
-- Contributing factors
-- Fix suggestions
-
-### Step 5: Output Formatting
-
-Output is structured into:
-
-- Summary
-- Root Cause
-- Evidence from logs
-- Suggested Fix
-- Prevention Strategy
-
----
-
-## 📦 Tech Stack
-
-- Python 3.10+
-- OpenAI API
-- FastAPI (if API-based)
-- Regex & Parsing Utilities
-- Token Counter (tiktoken or equivalent)
-- Docker (optional deployment)
-
----
-
-## 🛠 Installation
-
-```bash
-git clone git@github.com:kavin2207/ai-log-root-cause-analyzer.git
-cd ai-log-root-cause-analyzer
-pip install -r requirements.txt
+# ⚙️ Configuration
 
 Set environment variables:
-export OPENAI_API_KEY=your_api_key
 
-Usage
+export OPENAI_API_KEY=your_api_key\
+export MODEL_NAME=gpt-4o\
+export MAX_TOKENS=4096\
+export TEMPERATURE=0.2
 
-CLI Mode:
+------------------------------------------------------------------------
+
+# 🛠 Installation
+
+git clone git@github.com:kavin2207/ai-log-root-cause-analyzer.git\
+cd ai-log-root-cause-analyzer\
+pip install -r requirements.txt
+
+------------------------------------------------------------------------
+
+# ▶ Usage
+
+## CLI Mode
 
 python main.py --log-file sample.log
 
-uvicorn app:app --reload
+## API Mode
 
-
-Send logs via POST request:
+uvicorn app:app --host 0.0.0.0 --port 8000
 
 POST /analyze
-{
-  "log_data": "..."
-}
 
+{ "log_data": "raw log content here" }
 
-Example Output
+------------------------------------------------------------------------
 
-Root Cause:
-Database connection timeout due to misconfigured DB_HOST.
+# 📊 Example Output
 
-Evidence:
-ERROR: connection refused at line 245
+Root Cause: Database connection timeout due to misconfigured DB_HOST.
+
+Evidence: ERROR at line 245: connection refused\
 Timeout after 30s while connecting to db-service
 
-Suggested Fix:
-Verify DB_HOST and ensure database service is running.
+Suggested Fix: Verify DB_HOST configuration and ensure DB service is
+reachable.
 
 Confidence: 82%
 
+------------------------------------------------------------------------
+
+# 🔐 Security Considerations
+
+-   No persistent log storage
+-   In-memory processing
+-   API key secured via environment variables
+-   Sensitive data redaction recommended before upload
+
+------------------------------------------------------------------------
+
+# ⚠ Limitations
+
+-   Dependent on LLM reasoning quality
+-   Large logs increase API cost
+-   No persistent historical learning (yet)
+
+------------------------------------------------------------------------
+
+# 🚧 Roadmap
+
+-   Vector DB integration (RAG-based analysis)
+-   Historical incident learning
+-   Local LLM support
+-   Kubernetes operator integration
+-   Slack alert integration
+
+------------------------------------------------------------------------
+
+# 📜 License
+
+MIT License
